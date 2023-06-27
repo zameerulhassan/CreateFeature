@@ -1,0 +1,15 @@
+env.workspace= r"C:\Data.gdb"
+newfc = "NewPolyline.shp"
+outpath =r"C:\MyFolder"
+arcpy.CreateFeatureclass_management(outpath, newfc, "Polyline")
+infile =r"C:\coordinates.txt"
+
+icursor = arcpy.da.InsertCursor(newfc, ["SHAPE@"])
+array = arcpy.Array()
+for line in fileinput.input(infile):
+    ID, X, Y = str.split(line, " ")
+    array.add(arcpy.Point(X, Y))
+icursor.insertRow([arcpy.Polyline(array)])
+print("done!")
+fileinput.close()
+del icursor
